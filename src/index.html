@@ -3,12 +3,134 @@
 <head>
   <meta charset="UTF-8">
   <title>iRacing practice analyser</title>
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="../bower_components/chartist/dist/chartist.min.css">
 </head>
 <body>
 
 
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="collapsed navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-9" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button> <a href="#" class="navbar-brand">Brand</a>
+    </div>
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">Link</a></li>
+        <li><a href="#">Link</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
 
 
+<div class="row">
+  <div class="col-md-12">
+
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Driver</th>
+        <th>
+
+          Session 1
+
+          <span class="glyphicon glyphicon-info-sign"
+                aria-hidden="true"
+                data-toggle="tooltip"
+                data-placement="right"
+                data-html="true"
+                title="Mount Panorama<br>41C<br>24.09.16 - 10:37PM"></span>
+        </th>
+        <th>Session 2</th>
+        <th>Session 3</th>
+        <th>Session 4</th>
+        <th>Total laps</th>
+        <th>Time gain</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td>Driver X</td>
+        <td>02:12:354</td>
+        <td>02:10:225</td>
+        <td>02:11:457</td>
+        <td>02:08:568</td>
+        <td>87</td>
+        <td>-03:08</td>
+      </tr>
+      <tr>
+        <td>Driver Y</td>
+        <td>02:12:354</td>
+        <td>02:10:225</td>
+        <td>02:11:457</td>
+        <td>02:08:568</td>
+        <td>87</td>
+        <td>-03:08</td>
+      </tr>
+      <tr>
+        <td>Driver Z</td>
+        <td>02:12:354</td>
+        <td>02:10:225</td>
+        <td>02:11:457</td>
+        <td>02:08:568</td>
+        <td>87</td>
+        <td>-03:08</td>
+      </tr>
+      </tbody>
+    </table>
+
+
+    <div class="ct-chart ct-perfect-fourth"></div>
+
+  </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="../bower_components/chartist/dist/chartist.min.js"></script>
+
+
+
+<script type="text/javascript">
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  });
+
+  new Chartist.Line('.ct-chart', {
+    series: [
+      [
+        {x: 1, y: 130.5},
+        {x: 2, y: 128.8},
+        {x: 3, y: 125.3},
+        {x: 4, y: 130.7}
+      ],
+      [
+        {x: 1, y: 140.1},
+        {x: 2, y: 141.7},
+        {x: 3, y: 139.7},
+        {x: 4, y: 135.3}
+      ]
+    ]
+  }, {
+    axisX: {
+      type: Chartist.AutoScaleAxis,
+      onlyInteger: true
+    },
+    height: 400
+  });
+
+
+</script>
 
 </body>
 </html>

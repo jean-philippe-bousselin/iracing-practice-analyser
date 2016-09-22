@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "dependencies": {
     "angular": "~1.5.8",
-    "bootstrap": "~3.3.7"
+    "bootstrap": "~3.3.7",
+    "chart.js": "~2.2.2",
+    "chartist": "~0.9.8"
   }
 }
