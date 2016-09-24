@@ -49,6 +49,28 @@ $app->post('/event/add', function (Request $request) use ($app) {
         'name' => $name
     ));
 });
+$app->get('/event/{id}', function ($id) use ($app){
+
+    $sql = "SELECT * FROM event WHERE id = ?";
+    $event = $app['db']->fetchAssoc($sql, array($id));
+
+    if(!$event) {
+        return $app->redirect('/');
+    }
+
+    $sessions = getSessions($id, $app);
+
+    foreach($sessions as $key => $session) {
+
+        $results = getResults($session['id'], $app);
+        $sessions[$key]['driversResults'] = $results;
+    }
+
+    return $app['twig']->render('event-detail.twig', array(
+        'sessions' => $sessions,
+        'event' => $event,
+    ));
+});
 
 $app->get('/session/upload', function () use ($app) {
 
@@ -57,26 +79,28 @@ $app->get('/session/upload', function () use ($app) {
     ));
 });
 
-$app->post('/session/check-import', function (Request $request) use ($app) {
-    $debug = 1;
-
+$app->post('/session/import', function (Request $request) use ($app) {
     $csvArray                      = parseCSVFromRequest($request);
     $processedResults              = processCSVContent($csvArray);
-    $processedResults['sessionId'] = $request->request->get('event');
+    $processedResults['eventId']   = $request->request->get('event');
     $processedResults['infos']     = $request->request->get('infos');
 
     createSession($processedResults, $app);
 
-    $debug = 1;
-
-    return $app['twig']->render('session-check.twig', array(
-        'results' => $processedResults
-    ));
+    return $app->redirect('/index.php/event/' . $request->request->get('event'));
 });
 
 function getEvents($app) {
     $sql = "SELECT * FROM event ORDER BY name";
     return $app['db']->fetchAll($sql);
+}
+function getSessions($eventId, $app) {
+    $sql = "SELECT * FROM `session` WHERE event_id = ?";
+    return $app['db']->fetchAll($sql, array($eventId));
+}
+function getResults($sessionId, $app) {
+    $sql = "SELECT * FROM result WHERE session_id = ?";
+    return $app['db']->fetchAll($sql, array($sessionId));
 }
 function parseCSVFromRequest($request) {
     return array_map('str_getcsv', file($request->files->get('file')));
@@ -108,7 +132,7 @@ function createSession($sessionData, $app) {
         'name'     => $sessionData['sessionName'],
         'datetime' => $sessionData['startTime'],
         'infos'    => $sessionData['infos'],
-        'event_id' => $sessionData['sessionId'],
+        'event_id' => $sessionData['eventId'],
     ));
 
     $sessionId = $app['db']->lastInsertId();

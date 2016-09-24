@@ -1,0 +1,41 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+
+    <h1>{{ event.name }}</h1>
+    {% if sessions != false %}
+        <table class="table">
+            {% for key,session in sessions %}
+                <tr>
+                    <th>
+                        {{ session.datetime }}
+                        <span class="glyphicon glyphicon-info-sign"
+                              aria-hidden="true"
+                              data-toggle="tooltip"
+                              data-placement="right"
+                              data-html="true"
+                              title="{{ session.infos | nl2br}}"></span>
+                    </th>
+                    <th>Fastest lap</th>
+                    <th>Average lap</th>
+                    <th>Total laps</th>
+                    <th>Incidents</th>
+                </tr>
+                {% for key,result in session.driversResults %}
+                    <tr>
+                        <td>{{ result.driver_name }}</td>
+                        <td>{{ result.fastest_lap }}</td>
+                        <td>{{ result.average_lap}}</td>
+                        <td>{{ result.lap_count }}</td>
+                        <td>{{ result.incidents }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </table>
+    {% else %}
+        <p class="bg-warning">There are no sessions for this event yet.</p>
+        <a href="/">Home</a>
+    {% endif %}
+
+
+{% endblock %}

@@ -6,9 +6,8 @@
 
     <div class="list-group">
         {% for key,val in events %}
-            <a href="#" class="list-group-item">{{ val.name }}</a>
+            <a href="/index.php/event/{{ val.id }}" class="list-group-item">{{ val.name }}</a>
         {% endfor %}
-
     </div>
 
 {% endblock %}
