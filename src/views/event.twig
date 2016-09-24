@@ -1,0 +1,21 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+
+    <h1>Add event</h1>
+
+    {% if success is defined %}
+        <p class="bg-success">Event <b>{{ name }}</b> added.</p>
+    {% endif %}
+
+    <form method="post" action="/index.php/event/{{ action }}">
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+        </div>
+
+        <button type="submit" class="btn btn-default">Submit</button>
+
+    </form>
+
+{% endblock %}
