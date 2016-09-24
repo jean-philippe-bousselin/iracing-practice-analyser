@@ -1,0 +1,14 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+
+    <h1>Events</h1>
+
+    <div class="list-group">
+        {% for key,val in events %}
+            <a href="#" class="list-group-item">{{ val.name }}</a>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

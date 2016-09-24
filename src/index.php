@@ -27,8 +27,10 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
 /**
  * Routing
  */
-$app->get('/', function () {
-    return 'Hello!';
+$app->get('/', function () use ($app){
+    return $app['twig']->render('home.twig', array(
+        'events' => getEvents($app),
+    ));
 });
 
 $app->get('/event/add', function () use ($app) {
@@ -50,11 +52,8 @@ $app->post('/event/add', function (Request $request) use ($app) {
 
 $app->get('/session/upload', function () use ($app) {
 
-    $sql = "SELECT * FROM event ORDER BY name";
-    $events = $app['db']->fetchAll($sql);
-
     return $app['twig']->render('session.twig', array(
-        'events' => $events
+        'events' => getEvents($app)
     ));
 });
 
@@ -75,6 +74,10 @@ $app->post('/session/check-import', function (Request $request) use ($app) {
     ));
 });
 
+function getEvents($app) {
+    $sql = "SELECT * FROM event ORDER BY name";
+    return $app['db']->fetchAll($sql);
+}
 function parseCSVFromRequest($request) {
     return array_map('str_getcsv', file($request->files->get('file')));
 }
