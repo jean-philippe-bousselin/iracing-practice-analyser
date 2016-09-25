@@ -5,8 +5,12 @@
     <title>iRacing practice analyser</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet"
-          href="../bower_components/chartist/dist/chartist.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.min.js"></script>
+    <script src="/lib/chartist-plugin-legend.js"></script>
 </head>
 <body>
 
@@ -51,41 +55,11 @@
     </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="bower_components/chartist/dist/chartist.min.js"></script>
-
-
-
 <script type="text/javascript">
 
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
-
-    new Chartist.Line('.ct-chart', {
-        series: [
-            [
-                {x: 1, y: 130.5},
-                {x: 2, y: 128.8},
-                {x: 3, y: 125.3},
-                {x: 4, y: 130.7}
-            ],
-            [
-                {x: 1, y: 140.1},
-                {x: 2, y: 141.7},
-                {x: 3, y: 139.7},
-                {x: 4, y: 135.3}
-            ]
-        ]
-    }, {
-        axisX: {
-            type: Chartist.AutoScaleAxis,
-            onlyInteger: true
-        },
-        height: 400
-    });
-
 
 </script>
 

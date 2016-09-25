@@ -108,9 +108,35 @@ $app->get('/event/{id}/evolution', function ($id) use ($app){
         return $app->redirect('/');
     }
 
+    $sql = 'select driver_name, 
+                    group_concat(CONCAT_WS(\'-\', session_id, fastest_lap)) as agg_flaps  
+            from result r
+            join `session` s
+            on s.id = r.session_id
+            where s.event_id = ?
+            group by driver_name;';
+
+    $results = $app['db']->fetchAll($sql, array($id));
+
+    $array = array();
+    foreach($results as $k => $result) {
+        $array[$k] = array(
+            'name' => $result['driver_name'],
+            'data' => array()
+        );
+        $explodedTimes = explode(',', $result['agg_flaps']);
+        foreach($explodedTimes as $v => $time) {
+            $explodedTime = explode('-', $time);
+            $array[$k]['data'][$explodedTime[0]] = $explodedTime[1];
+        }
+    }
+
+    $debug = 1;
+
     return $app['twig']->render('event-detail-evolution.twig', array(
-        'event' => $event,
-        'page' => 'evolution'
+        'event'   => $event,
+        'page'    => 'evolution',
+        'results' => $array
     ));
 });
 
