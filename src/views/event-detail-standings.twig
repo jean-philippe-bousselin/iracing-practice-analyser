@@ -1,0 +1,32 @@
+{% extends "event-detail.twig" %}
+
+{% block eventContent %}
+
+
+    <br>
+
+    {% if standings != false %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Driver</th>
+                    <th>Fastest lap</th>
+                    <th>Total laps</th>
+                </tr>
+            </thead>
+            {% for key,standing in standings %}
+                <tr>
+                    <td>{{ standing.driver_name }}</td>
+                    <td>{{ standing.mlap }}</td>
+                    <td>{{ standing.tlaps }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p class="bg-warning">There are no standings for this event yet.</p>
+        <p><a href="/index.php/session/upload">Add session</a></p>
+        <p><a href="/">Home</a></p>
+    {% endif %}
+
+
+{% endblock %}

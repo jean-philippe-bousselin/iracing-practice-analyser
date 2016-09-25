@@ -66,11 +66,54 @@ $app->get('/event/{id}', function ($id) use ($app){
         $sessions[$key]['driversResults'] = $results;
     }
 
-    return $app['twig']->render('event-detail.twig', array(
+    return $app['twig']->render('event-detail-sessions.twig', array(
         'sessions' => $sessions,
         'event' => $event,
+        'page' => 'sessions'
     ));
 });
+$app->get('/event/{id}/standings', function ($id) use ($app){
+
+    $sql = "SELECT * FROM event WHERE id = ?";
+    $event = $app['db']->fetchAssoc($sql, array($id));
+
+    if(!$event) {
+        return $app->redirect('/');
+    }
+
+    $sql = 'select driver_name, 
+                   MIN(fastest_lap) as mlap, 
+                   SUM(lap_count) as tlaps  
+            from result r
+            join `session` s
+            on s.id = r.session_id
+            where s.event_id = ?
+            group by driver_name 
+            order by mlap;';
+
+    $standings = $app['db']->fetchAll($sql, array($id));
+
+    return $app['twig']->render('event-detail-standings.twig', array(
+        'event'     => $event,
+        'page'      => 'standings',
+        'standings' => $standings
+    ));
+});
+$app->get('/event/{id}/evolution', function ($id) use ($app){
+
+    $sql = "SELECT * FROM event WHERE id = ?";
+    $event = $app['db']->fetchAssoc($sql, array($id));
+
+    if(!$event) {
+        return $app->redirect('/');
+    }
+
+    return $app['twig']->render('event-detail-evolution.twig', array(
+        'event' => $event,
+        'page' => 'evolution'
+    ));
+});
+
 
 $app->get('/session/upload', function () use ($app) {
 

@@ -3,41 +3,13 @@
 {% block content %}
 
     <h1>{{ event.name }}</h1>
-    {% if sessions != false %}
-        <table class="table">
-            {% for key,session in sessions %}
-                <tr>
-                    <th>
-                        {{ session.datetime }}
-                        <span class="glyphicon glyphicon-info-sign"
-                              aria-hidden="true"
-                              data-toggle="tooltip"
-                              data-placement="right"
-                              data-html="true"
-                              title="{{ session.infos | nl2br}}"></span>
-                    </th>
-                    <th>Fastest lap</th>
-                    <th>Average lap</th>
-                    <th>Total laps</th>
-                    <th>Incidents</th>
-                </tr>
-                {% for key,result in session.driversResults %}
-                    <tr>
-                        <td>{{ result.driver_name }}</td>
-                        <td>{{ result.fastest_lap }}</td>
-                        <td>{{ result.average_lap}}</td>
-                        <td>{{ result.lap_count }}</td>
-                        <td>{{ result.incidents }}</td>
-                    </tr>
-                {% endfor %}
-            {% endfor %}
-        </table>
-    {% else %}
-        <p class="bg-warning">There are no sessions for this event yet.</p>
-        <p><a href="/index.php/session/upload">Add session</a></p>
-        <p><a href="/">Home</a></p>
 
-    {% endif %}
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="{{ (page == 'sessions') ? 'active' : '' }}"><a href="/index.php/event/1" role="tab">Sessions</a></li>
+        <li class="{{ (page == 'standings') ? 'active' : '' }}"><a href="/index.php/event/1/standings" role="tab">Standings</a></li>
+        <li class="{{ (page == 'evolution') ? 'active' : '' }}"><a href="/index.php/event/1/evolution" role="tab">Evolution</a></li>
+    </ul>
 
+    {% block eventContent %}{% endblock %}
 
 {% endblock %}
