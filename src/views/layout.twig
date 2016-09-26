@@ -23,21 +23,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button> <a href="/" class="navbar-brand">iRacing Practice Analyser</a>
+            </button> <a href="{{ path('home') }}" class="navbar-brand">iRacing Practice Analyser</a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
             <ul class="nav navbar-nav">
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Events <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/">List</a></li>
-                        <li><a href="/index.php/event/add">Add</a></li>
+                        <li><a href="{{ path('home') }}">List</a></li>
+                        <li><a href="{{ path('event-form') }}">Add</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sessions <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="/index.php/session/upload">Import</a></li>
+                        <li><a href="{{ path('session-upload') }}">Import</a></li>
                     </ul>
                 </li>
             </ul>

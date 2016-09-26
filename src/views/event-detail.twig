@@ -5,9 +5,9 @@
     <h1>{{ event.name }}</h1>
 
     <ul class="nav nav-tabs" role="tablist">
-        <li class="{{ (page == 'sessions') ? 'active' : '' }}"><a href="/index.php/event/1" role="tab">Sessions</a></li>
-        <li class="{{ (page == 'standings') ? 'active' : '' }}"><a href="/index.php/event/1/standings" role="tab">Standings</a></li>
-        <li class="{{ (page == 'evolution') ? 'active' : '' }}"><a href="/index.php/event/1/evolution" role="tab">Evolution</a></li>
+        <li class="{{ (page == 'sessions') ? 'active' : '' }}"><a href="{{ path('event-sessions', {'id': event.id}) }}" role="tab">Sessions</a></li>
+        <li class="{{ (page == 'standings') ? 'active' : '' }}"><a href="{{ path('event-standings', {'id': event.id}) }}" role="tab">Standings</a></li>
+        <li class="{{ (page == 'evolution') ? 'active' : '' }}"><a href="{{ path('event-evolution', {'id': event.id}) }}" role="tab">Evolution</a></li>
     </ul>
 
     {% block eventContent %}{% endblock %}

@@ -18,11 +18,13 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
             'host'      => 'localhost',
             'dbname'    => 'ipa',
             'user'      => 'root',
-            'password'  => '',
+            'password'  => 'akroma',
             'charset'   => 'utf8mb4',
         )
     ),
 ));
+
+$app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
 
 /**
  * Routing
@@ -31,13 +33,13 @@ $app->get('/', function () use ($app){
     return $app['twig']->render('home.twig', array(
         'events' => getEvents($app),
     ));
-});
+})->bind('home');
 
 $app->get('/event/add', function () use ($app) {
     return $app['twig']->render('event.twig', array(
         'action' => 'add',
     ));
-});
+})->bind('event-form');
 $app->post('/event/add', function (Request $request) use ($app) {
     $name = $request->get('name');
 
@@ -48,7 +50,7 @@ $app->post('/event/add', function (Request $request) use ($app) {
         'success' => 'true',
         'name' => $name
     ));
-});
+})->bind('event-create');
 $app->get('/event/{id}', function ($id) use ($app){
 
     $sql = "SELECT * FROM event WHERE id = ?";
@@ -71,7 +73,7 @@ $app->get('/event/{id}', function ($id) use ($app){
         'event' => $event,
         'page' => 'sessions'
     ));
-});
+})->bind('event-sessions');
 $app->get('/event/{id}/standings', function ($id) use ($app){
 
     $sql = "SELECT * FROM event WHERE id = ?";
@@ -98,7 +100,7 @@ $app->get('/event/{id}/standings', function ($id) use ($app){
         'page'      => 'standings',
         'standings' => $standings
     ));
-});
+})->bind('event-standings');
 $app->get('/event/{id}/evolution', function ($id) use ($app){
 
     $sql = "SELECT * FROM event WHERE id = ?";
@@ -138,7 +140,7 @@ $app->get('/event/{id}/evolution', function ($id) use ($app){
         'page'    => 'evolution',
         'results' => $array
     ));
-});
+})->bind('event-evolution');
 
 
 $app->get('/session/upload', function () use ($app) {
@@ -146,7 +148,7 @@ $app->get('/session/upload', function () use ($app) {
     return $app['twig']->render('session.twig', array(
         'events' => getEvents($app)
     ));
-});
+})->bind('session-upload');
 
 $app->post('/session/import', function (Request $request) use ($app) {
     $csvArray                      = parseCSVFromRequest($request);
@@ -156,8 +158,12 @@ $app->post('/session/import', function (Request $request) use ($app) {
 
     createSession($processedResults, $app);
 
-    return $app->redirect('/index.php/event/' . $request->request->get('event'));
-});
+    //return $app->redirect('/index.php/event/' . $request->request->get('event'));
+
+    return $app->redirect($app["url_generator"]->generate("event-sessions", array('id' => $request->request->get('event'))));
+
+
+})->bind('session-import');
 
 function getEvents($app) {
     $sql = "SELECT * FROM event ORDER BY name";

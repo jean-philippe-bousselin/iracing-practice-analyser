@@ -35,8 +35,8 @@
         </table>
     {% else %}
         <p class="bg-warning">There are no sessions for this event yet.</p>
-        <p><a href="/index.php/session/upload">Add session</a></p>
-        <p><a href="/">Home</a></p>
+        <p><a href="{{ path('session-upload') }}">Add session</a></p>
+        <p><a href="{{ path('home') }}">Home</a></p>
     {% endif %}
 
 
