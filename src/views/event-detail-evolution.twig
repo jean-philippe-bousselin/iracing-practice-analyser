@@ -2,39 +2,79 @@
 
 {% block eventContent %}
 
+    <div id="chart"></div>
 
-    <br>
-
-{{ dump(results) }}
-    <div class="ct-chart ct-perfect-fourth"></div>
-
+    <script src="https://code.highcharts.com/highcharts.js"></script>
     <script type="text/javascript">
-        new Chartist.Line('.ct-chart', {
-            labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-//            series: [
-//                { "name": "Money A", "data": [12, 9, 7, 8, 5] },
-//                { "name": "Money B", "data": [2, null, null, 7, 3] },
-//                { "name": "Money C", "data": [1, 3, 4, 5, 6] }
-//            ]
+        $(function () {
 
-            series: [
+            var series = [
+
                 {% for key,val in results %}
-                { "name": "{{ val.name }}", "data": [ {{ val.data|join(',') }} ] },
+                {
+                    name: '{{ val.name }}',
+                    data: [{{ val.data|join(',') }}]
+                },
                 {% endfor %}
-            ]
 
+            ];
 
+            var categories = series[0].data.map(function(value, key){
+                return 'Session ' + (key + 1);
+            });
 
-        }, {
-            fullWidth: true,
-            chartPadding: {
-                right: 40
-            },
-            plugins: [
-                Chartist.plugins.legend()
-            ],
-            height: 400
+            $('#chart').highcharts({
+                title: {
+                    text: 'Lap time evolution per driver',
+                    x: -20 //center
+                },
+                subtitle: {
+                    text: 'Based on fastest lap time per session',
+                    x: -20
+                },
+                xAxis: {
+                    categories: categories
+
+                },
+                yAxis: {
+                    title: {
+                        text: 'Lap time'
+                    },
+                    plotLines: [{
+                        value: 0,
+                        width: 1,
+                        color: '#808080'
+                    }],
+                    labels: {
+                        formatter: function () {
+                            var minutes = Math.floor(this.value / 60);
+                            var seconds = (this.value - (minutes*60));
+                            if(seconds < 10) {
+                                seconds = '0'+seconds;
+                            }
+                            return minutes + ':' + seconds;
+                        }
+                    }
+                },
+                tooltip: {
+                    formatter: function () {
+                        var minutes = Math.floor(this.y / 60);
+                        var seconds = (this.y - (minutes*60)).toFixed(3);
+                        if(seconds < 10) {
+                            seconds = '0'+seconds;
+                        }
+                        return this.point.series.name + ' : ' + minutes + ':' + seconds;
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                },
+                series: series
+            });
         });
+
     </script>
 
 

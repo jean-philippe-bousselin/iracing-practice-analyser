@@ -129,11 +129,9 @@ $app->get('/event/{id}/evolution', function ($id) use ($app){
         $explodedTimes = explode(',', $result['agg_flaps']);
         foreach($explodedTimes as $v => $time) {
             $explodedTime = explode('-', $time);
-            $array[$k]['data'][$explodedTime[0]] = $explodedTime[1];
+            $array[$k]['data'][$explodedTime[0]] = lapTimeToSeconds($explodedTime[1]);
         }
     }
-
-    $debug = 1;
 
     return $app['twig']->render('event-detail-evolution.twig', array(
         'event'   => $event,
@@ -157,8 +155,6 @@ $app->post('/session/import', function (Request $request) use ($app) {
     $processedResults['infos']     = $request->request->get('infos');
 
     createSession($processedResults, $app);
-
-    //return $app->redirect('/index.php/event/' . $request->request->get('event'));
 
     return $app->redirect($app["url_generator"]->generate("event-sessions", array('id' => $request->request->get('event'))));
 
@@ -200,8 +196,11 @@ function processCSVContent($csvArray) {
 
     return $array;
 }
+function lapTimeToSeconds($lapTime) {
+  $exploded = explode(':', $lapTime);
+  return (float) (((float) ($exploded[0] * 60)) + (float) $exploded[1]);
+}
 function createSession($sessionData, $app) {
-    $debug = 1;
     // Add session
     $app['db']->insert('session', array(
         'name'     => $sessionData['sessionName'],
