@@ -2,81 +2,88 @@
 
 {% block eventContent %}
 
-    <div id="chart"></div>
+    {% if results != false %}
+        <div id="chart"></div>
 
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script type="text/javascript">
-        $(function () {
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script type="text/javascript">
+            $(function () {
 
-            var series = [
+                var series = [
 
-                {% for key,val in results %}
-                {
-                    name: '{{ val.name }}',
-                    data: [{{ val.data|join(',') }}]
-                },
-                {% endfor %}
-
-            ];
-
-            var categories = series[0].data.map(function(value, key){
-                return 'Session ' + (key + 1);
-            });
-
-            $('#chart').highcharts({
-                title: {
-                    text: 'Lap time evolution per driver',
-                    x: -20 //center
-                },
-                subtitle: {
-                    text: 'Based on fastest lap time per session',
-                    x: -20
-                },
-                xAxis: {
-                    categories: categories
-
-                },
-                yAxis: {
-                    title: {
-                        text: 'Lap time'
+                    {% for key,val in results %}
+                    {
+                        name: '{{ val.name }}',
+                        data: [{{ val.data|join(',') }}]
                     },
-                    plotLines: [{
-                        value: 0,
-                        width: 1,
-                        color: '#808080'
-                    }],
-                    labels: {
+                    {% endfor %}
+
+                ];
+
+                var categories = series[0].data.map(function(value, key){
+                    return 'Session ' + (key + 1);
+                });
+
+                $('#chart').highcharts({
+                    title: {
+                        text: 'Lap time evolution per driver',
+                        x: -20 //center
+                    },
+                    subtitle: {
+                        text: 'Based on fastest lap time per session',
+                        x: -20
+                    },
+                    xAxis: {
+                        categories: categories
+
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Lap time'
+                        },
+                        plotLines: [{
+                            value: 0,
+                            width: 1,
+                            color: '#808080'
+                        }],
+                        labels: {
+                            formatter: function () {
+                                var minutes = Math.floor(this.value / 60);
+                                var seconds = (this.value - (minutes*60));
+                                if(seconds < 10) {
+                                    seconds = '0'+seconds;
+                                }
+                                return minutes + ':' + seconds;
+                            }
+                        }
+                    },
+                    tooltip: {
                         formatter: function () {
-                            var minutes = Math.floor(this.value / 60);
-                            var seconds = (this.value - (minutes*60));
+                            var minutes = Math.floor(this.y / 60);
+                            var seconds = (this.y - (minutes*60)).toFixed(3);
                             if(seconds < 10) {
                                 seconds = '0'+seconds;
                             }
-                            return minutes + ':' + seconds;
+                            return this.point.series.name + ' : ' + minutes + ':' + seconds;
                         }
-                    }
-                },
-                tooltip: {
-                    formatter: function () {
-                        var minutes = Math.floor(this.y / 60);
-                        var seconds = (this.y - (minutes*60)).toFixed(3);
-                        if(seconds < 10) {
-                            seconds = '0'+seconds;
-                        }
-                        return this.point.series.name + ' : ' + minutes + ':' + seconds;
-                    }
-                },
-                legend: {
-                    layout: 'vertical',
-                    align: 'center',
-                    verticalAlign: 'bottom'
-                },
-                series: series
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    },
+                    series: series
+                });
             });
-        });
 
-    </script>
+        </script>
 
+    {% else %}
+        <br>
+        <p class="bg-warning">There is no data for this event yet.</p>
+        <p><a href="{{ path('session-upload') }}">Add session</a></p>
+        <p><a href="{{ path('home') }}">Home</a></p>
+    {% endif %}
 
 
 {% endblock %}
