@@ -15,11 +15,13 @@
                 </tr>
             </thead>
             {% for key,standing in standings %}
+                {% if standing.mlap %}
                 <tr>
                     <td>{{ standing.driver_name }}</td>
                     <td>{{ standing.mlap }}</td>
                     <td>{{ standing.tlaps }}</td>
                 </tr>
+                {% endif %}
             {% endfor %}
         </table>
     {% else %}
