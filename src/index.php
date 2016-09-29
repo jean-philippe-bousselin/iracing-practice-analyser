@@ -116,6 +116,7 @@ $app->get('/event/{id}/evolution', function ($id) use ($app){
             join `session` s
             on s.id = r.session_id
             where s.event_id = ?
+            and fastest_lap > 0
             group by driver_name;';
 
     $results = $app['db']->fetchAll($sql, array($id));
