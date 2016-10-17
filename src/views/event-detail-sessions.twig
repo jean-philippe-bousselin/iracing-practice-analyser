@@ -9,13 +9,18 @@
             {% for key,session in sessions %}
                 <tr>
                     <th>
-                        {{ session.name}} - {{ session.datetime }}
+                        {% if session.name %}
+                        {{ session.name}} -
+                        {% endif %}
+                        {{ session.datetime }}
+                        {% if session.infos %}
                         <span class="glyphicon glyphicon-info-sign"
                               aria-hidden="true"
                               data-toggle="tooltip"
                               data-placement="right"
                               data-html="true"
                               title="{{ session.infos | nl2br}}"></span>
+                        {% endif %}
                     </th>
                     <th>Fastest lap</th>
                     <th>Average lap</th>

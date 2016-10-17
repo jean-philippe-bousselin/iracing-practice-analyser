@@ -9,12 +9,10 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    {#<script src="https://cdnjs.cloudflare.com/ajax/libs/chartist/0.9.8/chartist.min.js"></script>#}
-    {#<script src="{{ app.request.getBaseURL()|replace({'index.php': ''})}}lib/chartist-plugin-legend.js"></script>#}
 </head>
 <body>
 
-
+{% if runAsIframe != 'true' %}
 <nav class="navbar navbar-inverse">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -44,6 +42,7 @@
         </div>
     </div>
 </nav>
+{% endif %}
 
 <div class="container-fluid">
     <div class="row">

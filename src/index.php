@@ -18,7 +18,7 @@ $app->register(new Silex\Provider\DoctrineServiceProvider(), array(
             'host'      => 'localhost',
             'dbname'    => 'ipa',
             'user'      => 'root',
-            'password'  => 'akroma',
+            'password'  => '',
             'charset'   => 'utf8mb4',
         )
     ),
@@ -32,12 +32,14 @@ $app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
 $app->get('/', function () use ($app){
     return $app['twig']->render('home.twig', array(
         'events' => getEvents($app),
+        'runAsIframe' => false
     ));
 })->bind('home');
 
 $app->get('/event/add', function () use ($app) {
     return $app['twig']->render('event.twig', array(
         'action' => 'add',
+        'runAsIframe' => false
     ));
 })->bind('event-form');
 $app->post('/event/add', function (Request $request) use ($app) {
@@ -48,33 +50,12 @@ $app->post('/event/add', function (Request $request) use ($app) {
     return $app['twig']->render('event.twig', array(
         'action' => 'add',
         'success' => 'true',
-        'name' => $name
+        'name' => $name,
+        'runAsIframe' => false
     ));
 })->bind('event-create');
-$app->get('/event/{id}', function ($id) use ($app){
 
-    $sql = "SELECT * FROM event WHERE id = ?";
-    $event = $app['db']->fetchAssoc($sql, array($id));
-
-    if(!$event) {
-        return $app->redirect('/');
-    }
-
-    $sessions = getSessions($id, $app);
-
-    foreach($sessions as $key => $session) {
-
-        $results = getResults($session['id'], $app);
-        $sessions[$key]['driversResults'] = $results;
-    }
-
-    return $app['twig']->render('event-detail-sessions.twig', array(
-        'sessions' => $sessions,
-        'event' => $event,
-        'page' => 'sessions'
-    ));
-})->bind('event-sessions');
-$app->get('/event/{id}/standings', function ($id) use ($app){
+$app->get('/event/{id}/standings/{isIframe}', function ($id, $isIframe) use ($app){
 
     $sql = "SELECT * FROM event WHERE id = ?";
     $event = $app['db']->fetchAssoc($sql, array($id));
@@ -98,9 +79,11 @@ $app->get('/event/{id}/standings', function ($id) use ($app){
     return $app['twig']->render('event-detail-standings.twig', array(
         'event'     => $event,
         'page'      => 'standings',
-        'standings' => $standings
+        'standings' => $standings,
+        'runAsIframe' => $isIframe
     ));
-})->bind('event-standings');
+})->value('isIframe', 'false')
+    ->bind('event-standings');
 $app->get('/event/{id}/evolution', function ($id) use ($app){
 
     $sql = "SELECT * FROM event WHERE id = ?";
@@ -141,11 +124,37 @@ $app->get('/event/{id}/evolution', function ($id) use ($app){
     ));
 })->bind('event-evolution');
 
+$app->get('/event/{id}/{isIframe}', function ($id, $isIframe) use ($app){
+
+    $sql = "SELECT * FROM event WHERE id = ?";
+    $event = $app['db']->fetchAssoc($sql, array($id));
+
+    if(!$event) {
+        return $app->redirect('/');
+    }
+
+    $sessions = getSessions($id, $app);
+
+    foreach($sessions as $key => $session) {
+
+        $results = getResults($session['id'], $app);
+        $sessions[$key]['driversResults'] = $results;
+    }
+
+    return $app['twig']->render('event-detail-sessions.twig', array(
+        'sessions'    => $sessions,
+        'event'       => $event,
+        'page'        => 'sessions',
+        'runAsIframe' => $isIframe
+    ));
+})->value('isIframe', 'false')
+    ->bind('event-sessions');
 
 $app->get('/session/upload', function () use ($app) {
 
     return $app['twig']->render('session.twig', array(
-        'events' => getEvents($app)
+        'events' => getEvents($app),
+        'runAsIframe' => false
     ));
 })->bind('session-upload');
 
@@ -183,7 +192,15 @@ function processCSVContent($csvArray) {
     $array['sessionName']    = $csvArray[1][3];
     $array['driversResults'] = array();
 
-    for($i = 4; $i < count($csvArray); $i++) {
+    // get the stating line for lap times
+    $startingLine = 4;
+    foreach($csvArray as $key => $line) {
+        if($line[0] == 'Fin Pos') {
+            $startingLine = $key + 1;
+        }
+    }
+
+    for($i = $startingLine; $i < count($csvArray); $i++) {
         $driver = array();
         $driver['name']        = $csvArray[$i][7];
         $driver['car']         = $csvArray[$i][2];

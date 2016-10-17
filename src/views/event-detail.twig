@@ -7,9 +7,18 @@
     <ul class="nav nav-tabs" role="tablist">
         <li class="{{ (page == 'sessions') ? 'active' : '' }}"><a href="{{ path('event-sessions', {'id': event.id}) }}" role="tab">Sessions</a></li>
         <li class="{{ (page == 'standings') ? 'active' : '' }}"><a href="{{ path('event-standings', {'id': event.id}) }}" role="tab">Standings</a></li>
-        <li class="{{ (page == 'evolution') ? 'active' : '' }}"><a href="{{ path('event-evolution', {'id': event.id}) }}" role="tab">Evolution</a></li>
+        {#<li class="{{ (page == 'evolution') ? 'active' : '' }}"><a href="{{ path('event-evolution', {'id': event.id}) }}" role="tab">Evolution</a></li>#}
     </ul>
 
     {% block eventContent %}{% endblock %}
+
+
+    <h2>Embed</h2>
+
+    <div class="well well-lg">
+
+        &lt;iframe src="http://www.incarmal.com/iracing-practice-analyser/event/{{ event.id }}/true"&gt;&lt;/iframe&gt;
+
+    </div>
 
 {% endblock %}
