@@ -5,47 +5,51 @@
     <br>
 
     {% if sessions != false %}
-        <table class="table">
             {% for key,session in sessions %}
-                <tr>
-                    <th>
-                        {% if session.name %}
-                        {{ session.name}} -
-                        {% endif %}
-                        {{ session.datetime }}
-                        {% if session.infos %}
-                        <span class="glyphicon glyphicon-info-sign"
-                              aria-hidden="true"
-                              data-toggle="tooltip"
-                              data-placement="right"
-                              data-html="true"
-                              title="{{ session.infos | nl2br}}"></span>
-                        {% endif %}
-                    </th>
-                    <th>Fastest lap</th>
-                    <th>Average lap</th>
-                    <th>Total laps</th>
-                    <th>Incidents</th>
-                    {% if runAsIframe != 'true' %}
-                        <th><button class="btn btn-primary">Download image</button></th>
-                        <th><a href="{{ path('session-delete', {'id': session.id}) }}" class="btn btn-danger">Delete</a></th>
-                    {% endif %}
-                </tr>
-                {% for key,result in session.driversResults %}
+                <table id="session{{ session.id }}" class="table" style="background: white;">
                     <tr>
-                        <td>{{ result.driver_name }}</td>
-                        <td>{{ result.fastest_lap }}</td>
-                        <td>{{ result.average_lap}}</td>
-                        <td>{{ result.lap_count }}</td>
-                        <td>{{ result.incidents }}</td>
-                        {% if runAsIframe != 'true' %}
-                            <th></th>
-                            <th></th>
-                        {% endif %}
+                        <th>
+                            {% if session.name %}
+                            {{ session.name}} -
+                            {% endif %}
+                            {{ session.datetime }}
+                            {% if session.infos %}
+                            <span class="glyphicon glyphicon-info-sign"
+                                  aria-hidden="true"
+                                  data-toggle="tooltip"
+                                  data-placement="right"
+                                  data-html="true"
+                                  title="{{ session.infos | nl2br}}"></span>
+                            {% endif %}
+                        </th>
+                        <th>Fastest lap</th>
+                        <th>Average lap</th>
+                        <th>Total laps</th>
+                        <th>Incidents</th>
                     </tr>
-                {% endfor %}
+                    {% for key,result in session.driversResults %}
+                        <tr>
+                            <td>{{ result.driver_name }}</td>
+                            <td>{{ result.fastest_lap }}</td>
+                            <td>{{ result.average_lap}}</td>
+                            <td>{{ result.lap_count }}</td>
+                            <td>{{ result.incidents }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                {% if runAsIframe != 'true' %}
+                    <button type="button" onclick="generateImage('session{{ session.id }}')" class="btn btn-primary">Download image</button>
+                    <a href="{{ path('session-delete', {'id': session.id}) }}" class="btn btn-danger">Delete</a>
+                    <br><br><br>
+                {% endif %}
             {% endfor %}
-        </table>
+
+        <div id="render-wrapper" style="display: none;">
+            <div id="rendered-image"></div>
+            <a id="download" onclick="downloadCanvas(this, 'rendered-canvas', 'fundrasing_status.png');">Download as image</a>
+        </div>
+
+
     {% else %}
         <p class="bg-warning">There are no sessions for this event yet.</p>
         <p><a href="{{ path('session-upload') }}">Add session</a></p>

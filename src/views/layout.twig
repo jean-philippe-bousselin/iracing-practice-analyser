@@ -9,6 +9,33 @@
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+    <script src="../html2canvas.js"></script>
+
+    <script>
+        function generateImage(sessionId) {
+            html2canvas(document.getElementById(sessionId), {
+                onrendered: function(canvas) {
+                    canvas.id = 'rendered-canvas';
+                    document.getElementById('rendered-image').innerHTML = '';
+                    document.getElementById('rendered-image').appendChild(canvas);
+                    document.getElementById('download').click();
+                }
+            });
+        }
+
+        /**
+         * This is the function that will take care of image extracting and
+         * setting proper filename for the download.
+         * IMPORTANT: Call it from within a onclick event.
+         */
+        function downloadCanvas(link, canvasId, filename) {
+            link.href = document.getElementById(canvasId).toDataURL();
+            link.download = filename;
+        }
+
+    </script>
+
 </head>
 <body>
 
