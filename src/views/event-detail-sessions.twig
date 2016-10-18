@@ -26,6 +26,10 @@
                     <th>Average lap</th>
                     <th>Total laps</th>
                     <th>Incidents</th>
+                    {% if runAsIframe != 'true' %}
+                        <th><button class="btn btn-primary">Download image</button></th>
+                        <th><a href="{{ path('session-delete', {'id': session.id}) }}" class="btn btn-danger">Delete</a></th>
+                    {% endif %}
                 </tr>
                 {% for key,result in session.driversResults %}
                     <tr>
@@ -34,6 +38,10 @@
                         <td>{{ result.average_lap}}</td>
                         <td>{{ result.lap_count }}</td>
                         <td>{{ result.incidents }}</td>
+                        {% if runAsIframe != 'true' %}
+                            <th></th>
+                            <th></th>
+                        {% endif %}
                     </tr>
                 {% endfor %}
             {% endfor %}

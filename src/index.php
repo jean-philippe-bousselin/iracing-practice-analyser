@@ -170,6 +170,16 @@ $app->post('/session/import', function (Request $request) use ($app) {
 
 
 })->bind('session-import');
+$app->get('/session/delete/{id}', function ($id) use ($app) {
+
+    $sql = "SELECT event_id FROM session WHERE id = ?";
+    $event = $app['db']->fetchAssoc($sql, array($id));
+
+    $app['db']->delete('result', array('session_id'=> $id));
+    $app['db']->delete('session', array('id'=> $id));
+    return $app->redirect($app["url_generator"]->generate("event-sessions", array('id' => $event['event_id'])));
+})->bind('session-delete');
+
 
 function getEvents($app) {
     $sql = "SELECT * FROM event ORDER BY name";
