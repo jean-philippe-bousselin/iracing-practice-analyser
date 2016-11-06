@@ -5,7 +5,7 @@ docker build -t ipa .
 docker run -d --name="ipa_app" -p 80:80 -p 3306:3306 -v $(pwd)/src:/app ipa
 
 # node/gulp/bower image
-docker pull evolution7/nodejs-bower-gulp
+# docker pull evolution7/nodejs-bower-gulp
 # docker exec -it ipa_app bash
 
 

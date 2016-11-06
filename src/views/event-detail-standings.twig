@@ -2,11 +2,10 @@
 
 {% block eventContent %}
 
-
     <br>
 
     {% if standings != false %}
-        <table class="table">
+        <table id="session-standings-table" class="table">
             <thead>
                 <tr>
                     <th>Driver</th>
@@ -24,11 +23,18 @@
                 {% endif %}
             {% endfor %}
         </table>
+
+        <button type="button" onclick="generateImage('session-standings-table');" class="btn btn-primary">Download image</button>
+
     {% else %}
         <p class="bg-warning">There are no standings for this event yet.</p>
         <p><a href="{{ path('session-upload') }}">Add session</a></p>
         <p><a href="{{ path('home') }}">Home</a></p>
     {% endif %}
 
+    <div id="render-wrapper" style="display: none;">
+        <div id="rendered-image"></div>
+        <a id="download" onclick="downloadCanvas(this, 'rendered-canvas', 'session-standings.png');">Download as image</a>
+    </div>
 
 {% endblock %}
